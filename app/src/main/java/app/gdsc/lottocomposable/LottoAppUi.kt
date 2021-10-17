@@ -1,16 +1,11 @@
 package app.gdsc.lottocomposable
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -111,7 +106,15 @@ fun LottoItemUi(number: Int) {
 }
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun LottoAppUiPreview() {
-    LottoAppUi()
+@Preview(showBackground = true)
+fun LottoItemUiPreview() {
+    LottoItemUi(45)
+}
+
+@Composable
+@Preview(showBackground = true)
+fun LottoContainerUiPreview() {
+    LottoContainerUi(
+        listOf(1, 11, 21, 31, 40, 45)
+    )
 }
