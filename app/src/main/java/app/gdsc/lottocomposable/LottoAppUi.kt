@@ -52,7 +52,7 @@ fun LottoAppUi() {
                     }
                 }
             ) {
-                Text("뽑기")
+                Text(if (lottoList.size == 6) "다시 뽑기" else "뽑기 (${lottoList.size} / 6")
             }
 
         }
