@@ -35,9 +35,10 @@ fun LottoAppUi() {
                 .padding(20.dp)
         ) {
 
-            LottoContainerUi(lottoList)
-
-            Spacer(modifier = Modifier.height(20.dp))
+            if (lottoList.isNotEmpty()) {
+                LottoContainerUi(lottoList)
+                Spacer(modifier = Modifier.height(20.dp))
+            }
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
@@ -52,7 +53,11 @@ fun LottoAppUi() {
                     }
                 }
             ) {
-                Text(if (lottoList.size == 6) "다시 뽑기" else "뽑기 (${lottoList.size} / 6")
+                if (lottoList.size == 6) {
+                    Text("다시 뽑기")
+                } else {
+                    Text("뽑기 (${lottoList.size} / 6)")
+                }
             }
 
         }
@@ -65,7 +70,9 @@ fun LottoAppUi() {
 fun LottoContainerUi(lottoList: List<Int>) {
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(100.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         lottoList.forEach {
