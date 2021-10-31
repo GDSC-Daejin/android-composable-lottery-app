@@ -2,9 +2,9 @@ package app.gdsc.lottocomposable
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Help
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,16 +16,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LottoAppUi() {
 
-    var totalLottoList by remember {
-        mutableStateOf(
-            (1..45).shuffled().toList()
-        )
-    }
-
-    var lottoList by remember {
-        mutableStateOf(listOf<Int>())
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
 
         Column(
@@ -35,33 +25,64 @@ fun LottoAppUi() {
                 .padding(20.dp)
         ) {
 
+            var totalLottoList by remember {
+                mutableStateOf((1..45).shuffled().toList())
+            }
+
+            var lottoList by remember {
+                mutableStateOf(listOf<Int>())
+            }
+
             if (lottoList.isNotEmpty()) {
                 LottoContainerUi(lottoList)
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    if (lottoList.size >= 6) {
-                        lottoList = emptyList()
-                        totalLottoList = (1..45).shuffled().toList()
-                    } else {
-                        val item = totalLottoList.random()
-                        totalLottoList = totalLottoList - item
-                        lottoList = lottoList + item
-                    }
-                }
-            ) {
-                if (lottoList.size == 6) {
-                    Text("다시 뽑기")
-                } else {
-                    Text("뽑기 (${lottoList.size} / 6)")
-                }
-            }
+            LottoPickButton(
+                Modifier.align(Alignment.CenterHorizontally),
+                lottoList,
+                totalLottoList,
+                { lottoList = it },
+                { totalLottoList = it }
+            )
 
         }
 
+    }
+
+}
+
+@Composable
+fun LottoPickButton(
+    modifier : Modifier = Modifier,
+    lottoList: List<Int>,
+    totalLottoList: List<Int>,
+    onLottoListUpdated: (List<Int>) -> Unit,
+    onTotalLottoListUpdated: (List<Int>) -> Unit,
+) {
+    if (lottoList.size == 6) {
+        Button(
+            modifier = modifier.fillMaxWidth(),
+            onClick = {
+                onLottoListUpdated(emptyList())
+                onTotalLottoListUpdated((1..45).shuffled().toList())
+            }
+        ) {
+            Text("다시 뽑기")
+        }
+    } else {
+        ExtendedFloatingActionButton(
+            modifier = modifier,
+            onClick = {
+                val item = totalLottoList.random()
+                onLottoListUpdated(lottoList + item)
+                onTotalLottoListUpdated(totalLottoList - item)
+            },
+            icon = {
+                   Icon(imageVector = Icons.Rounded.Help, contentDescription = "Pick")
+            },
+        text = { Text("뽑기") }
+        )
     }
 
 }
